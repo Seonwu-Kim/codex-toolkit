@@ -1,0 +1,61 @@
+{
+  "brand": "LivePick",
+  "title": "MVP API 명세서",
+  "version": "v1.1",
+  "subtitle": "API Specification - REST / JSON",
+  "header": "LivePick | MVP API 명세서 v1.1",
+  "primary_color": "#223f73",
+  "accent_color": "#0b7f90",
+  "section_page_break": "always",
+  "first_column_width": "22%",
+  "first_column_background": "#fafafa",
+  "first_column_font_weight": "bold",
+  "first_column_white_space": "nowrap",
+  "cover_fields": [
+    {
+      "label": "프로젝트",
+      "value": "LivePick MVP"
+    },
+    {
+      "label": "문서명",
+      "value": "MVP API 명세서"
+    },
+    {
+      "label": "버전",
+      "value": "v1.1"
+    },
+    {
+      "label": "Base URL",
+      "lines": [
+        {
+          "label": "Local",
+          "value": "http://localhost:8080/api"
+        },
+        {
+          "label": "Development",
+          "value": "https://api.livepick-dev.example.com/api"
+        }
+      ]
+    },
+    {
+      "label": "인증 방식",
+      "lines": [
+        "운영자 API: OAuth 2.0 User JWT",
+        "Worker/Internal API: OAuth 2.0 Client Credentials",
+        "Public PWA API: 인증 없음"
+      ]
+    },
+    {
+      "label": "작성일",
+      "value": "2026-06-10"
+    }
+  ],
+  "revisions": [
+    {
+      "version": "v1.1",
+      "date": "2026-06-10",
+      "author": "김선우 사원",
+      "description": "확정된 ERD를 바탕으로 API 명세 구체화"
+    }
+  ]
+}

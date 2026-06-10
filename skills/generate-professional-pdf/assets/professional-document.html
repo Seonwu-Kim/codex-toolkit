@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 20mm 25mm 20mm;
+      @top-right {
+        content: "{{header}}";
+        font-family: "NanumGothic", "Malgun Gothic", sans-serif;
+        font-size: 8pt;
+        color: #999;
+        padding-bottom: 5mm;
+      }
+      @bottom-center {
+        content: "- " counter(page) " -";
+        font-family: "NanumGothic", "Malgun Gothic", sans-serif;
+        font-size: 8pt;
+        color: #999;
+      }
+    }
+
+    :root {
+      --primary: {{primary_color}};
+      --accent: {{accent_color}};
+      --light-accent: #f0fafa;
+      --border: #e0e0e0;
+      --first-column-width: {{first_column_width}};
+      --first-column-background: {{first_column_background}};
+      --first-column-font-weight: {{first_column_font_weight}};
+      --first-column-white-space: {{first_column_white_space}};
+    }
+
+    body {
+      font-family: "NanumGothic", "Malgun Gothic", sans-serif;
+      line-height: 1.55;
+      color: #444;
+      font-size: 9.5pt;
+      word-break: keep-all;
+      margin: 0;
+    }
+
+    .page-border-top,
+    .page-border-bottom {
+      position: fixed;
+      left: 0;
+      right: 0;
+      border-top: 0.5pt solid var(--accent);
+    }
+
+    .page-border-top { top: -10mm; }
+    .page-border-bottom { bottom: -15mm; }
+
+    .cover-page {
+      min-height: 260mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      page-break-after: always;
+      text-align: center;
+      padding-top: 30mm;
+    }
+
+    .cover-logo {
+      color: var(--accent);
+      font-size: 32pt;
+      font-weight: bold;
+      margin-bottom: 5mm;
+    }
+
+    .cover-title {
+      color: var(--primary);
+      font-size: 26pt;
+      font-weight: bold;
+      margin-bottom: 3mm;
+    }
+
+    .cover-version {
+      color: var(--accent);
+      font-size: 16pt;
+      font-weight: bold;
+      margin-bottom: 5mm;
+    }
+
+    .cover-subtitle {
+      color: #999;
+      font-size: 11pt;
+      font-style: italic;
+      margin-bottom: 25mm;
+    }
+
+    .cover-table,
+    .revision-history {
+      width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cover-table {
+      border-collapse: collapse;
+    }
+
+    .cover-table td {
+      border: 0.4pt solid var(--border);
+      padding: 8pt 12pt;
+      text-align: left;
+    }
+
+    .cover-table td:first-child {
+      width: 28%;
+      white-space: nowrap;
+      background: var(--light-accent);
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .revision-history {
+      margin-top: 25mm;
+    }
+
+    .revision-history h3 {
+      text-align: left;
+      font-size: 11pt;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 20pt;
+      margin-top: 0;
+      margin-bottom: 18pt;
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 16pt;
+      margin-top: 40pt;
+      margin-bottom: 15pt;
+      padding-bottom: 8pt;
+      border-bottom: 0.5pt solid #eee;
+      page-break-before: {{section_page_break}};
+    }
+
+    h3 {
+      color: var(--accent);
+      font-size: 12pt;
+      margin-top: 20pt;
+      margin-bottom: 10pt;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      color: #333;
+      font-size: 11pt;
+      margin-top: 15pt;
+      margin-bottom: 8pt;
+      page-break-after: avoid;
+    }
+
+    .content-wrapper > h1:first-child {
+      display: none;
+    }
+
+    .content-wrapper > h1:first-child + h2,
+    .content-wrapper > h2:first-child {
+      page-break-before: avoid;
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-bottom: 15pt;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 7pt 10pt;
+      text-align: left;
+      border: 0.4pt solid var(--border);
+      font-weight: normal;
+      font-size: 9pt;
+    }
+
+    td {
+      padding: 6pt 10pt;
+      border: 0.4pt solid var(--border);
+      vertical-align: top;
+      font-size: 9pt;
+      overflow-wrap: break-word;
+    }
+
+    .content-wrapper table td:first-child {
+      width: var(--first-column-width);
+      background: var(--first-column-background);
+      font-weight: var(--first-column-font-weight);
+      white-space: var(--first-column-white-space);
+    }
+
+    .revision-table td {
+      width: auto;
+      white-space: normal;
+      background: transparent;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    pre {
+      background: var(--primary);
+      color: #e0f2f1;
+      padding: 10pt;
+      border-radius: 2pt;
+      margin-bottom: 15pt;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      page-break-inside: avoid;
+      font-family: "Courier New", monospace;
+    }
+
+    blockquote {
+      margin: 12pt 0;
+      padding: 8pt 12pt;
+      border-left: 3pt solid var(--accent);
+      background: #fafafa;
+      color: #555;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 12pt auto;
+      page-break-inside: avoid;
+    }
+
+    hr {
+      border: 0;
+      border-top: 0.5pt solid #eee;
+      margin: 20pt 0;
+    }
+
+    p, ul, ol { margin: 8pt 0; }
+    ul, ol { padding-left: 18pt; }
+    li { margin-bottom: 4pt; }
+  </style>
+</head>
+<body>
+  <div class="page-border-top"></div>
+  <div class="page-border-bottom"></div>
+
+  <div class="cover-page">
+    <div class="cover-logo">{{brand}}</div>
+    <div class="cover-title">{{title}}</div>
+    <div class="cover-version">{{version}}</div>
+    <div class="cover-subtitle">{{subtitle}}</div>
+    {{cover_content}}
+  </div>
+
+  <div class="content-wrapper">
+    {{content}}
+  </div>
+</body>
+</html>

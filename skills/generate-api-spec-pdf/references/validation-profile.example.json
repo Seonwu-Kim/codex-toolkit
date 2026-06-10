@@ -1,0 +1,41 @@
+{
+  "required_text": [
+    "Method / Path",
+    "요청 예시",
+    "응답 예시"
+  ],
+  "forbidden_terms": [
+    "publication",
+    "clip_rendition",
+    "operation_log"
+  ],
+  "forbidden_patterns": [
+    "\\bGET/POST\\b",
+    "\\bGET/PUT\\b",
+    "\\.\\.\\."
+  ],
+  "expected_occurrences": {
+    "Method / Path": 97,
+    "요청 예시": 97,
+    "응답 예시": 97
+  },
+  "equal_occurrence_groups": [
+    [
+      "Method / Path",
+      "요청 예시",
+      "응답 예시"
+    ]
+  ],
+  "minimum_page_count": 2,
+  "review_terms": [
+    "문서 변경 이력",
+    "Job·로그·설정",
+    "하이라이트 API",
+    "공개 하이라이트 상세 조회"
+  ],
+  "report_occurrences": [
+    "Method / Path",
+    "요청 예시",
+    "응답 예시"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "required_text": [
+    "문서 개요",
+    "결론"
+  ],
+  "forbidden_terms": [
+    "TBD",
+    "TODO"
+  ],
+  "forbidden_patterns": [],
+  "expected_occurrences": {
+    "결론": 1
+  },
+  "equal_occurrence_groups": [],
+  "minimum_page_count": 2,
+  "review_terms": [
+    "문서 개요",
+    "결론"
+  ],
+  "report_occurrences": [
+    "문서 개요",
+    "결론"
+  ]
+}

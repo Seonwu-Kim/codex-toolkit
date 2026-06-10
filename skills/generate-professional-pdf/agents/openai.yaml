@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Professional PDF"
+  short_description: "Create and visually validate polished professional PDF documents"
+  default_prompt: "Turn one or more Markdown documents into a polished professional PDF and verify its content and every rendered page."

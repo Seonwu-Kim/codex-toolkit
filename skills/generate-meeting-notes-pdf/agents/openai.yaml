@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Meeting Notes PDF"
+  short_description: "Create compact decision-focused meeting PDFs"
+  default_prompt: "Turn meeting notes into a compact, validated PDF centered on decisions, action items, owners, and due dates."

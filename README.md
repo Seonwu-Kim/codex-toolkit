@@ -8,6 +8,15 @@ Personal Codex skills and reusable workflows.
   텍스트 및 전체 페이지 렌더링을 검증합니다.
 - `generate-api-spec-pdf`: API 명세를 endpoint 단위로 정규화한 뒤
   `generate-professional-pdf`를 사용해 PDF로 생성합니다.
+- `generate-technical-spec-pdf`: 요구사항, ERD, 데이터 모델, 아키텍처를
+  촘촘한 표와 장별 페이지 구성의 기술 명세 PDF로 생성합니다. API
+  endpoint 계약이 중심이면 `generate-api-spec-pdf`를 사용합니다.
+- `generate-project-report-pdf`: 구현 계획, 진행 상황, 테스트 결과를
+  요약 지표, 마일스톤, 결과, 다음 작업 중심의 PDF로 생성합니다.
+- `generate-incident-report-pdf`: 장애 증거를 영향도, 타임라인, 원인,
+  조치, 담당자 중심의 PDF로 생성합니다.
+- `generate-meeting-notes-pdf`: 회의 내용을 결정 사항과 담당자·기한이
+  있는 액션 아이템 중심의 짧고 밀도 높은 PDF로 생성합니다.
 
 ## Install
 

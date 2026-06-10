@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Incident Report PDF"
+  short_description: "Create evidence-led incident report PDFs"
+  default_prompt: "Turn incident evidence into a validated report covering timeline, impact, root cause, remediation, and ownership."

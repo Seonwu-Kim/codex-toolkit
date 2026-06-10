@@ -30,13 +30,21 @@
       --first-column-background: {{first_column_background}};
       --first-column-font-weight: {{first_column_font_weight}};
       --first-column-white-space: {{first_column_white_space}};
+      --body-font-size: {{body_font_size}};
+      --body-line-height: {{body_line_height}};
+      --table-font-size: {{table_font_size}};
+      --table-page-break: {{table_page_break}};
+      --cover-min-height: {{cover_min_height}};
+      --cover-padding-top: {{cover_padding_top}};
+      --cover-title-size: {{cover_title_size}};
+      --cover-page-break: {{cover_page_break}};
     }
 
     body {
       font-family: "NanumGothic", "Malgun Gothic", sans-serif;
-      line-height: 1.55;
+      line-height: var(--body-line-height);
       color: #444;
-      font-size: 9.5pt;
+      font-size: var(--body-font-size);
       word-break: keep-all;
       margin: 0;
     }
@@ -53,13 +61,13 @@
     .page-border-bottom { bottom: -15mm; }
 
     .cover-page {
-      min-height: 260mm;
+      min-height: var(--cover-min-height);
       display: flex;
       flex-direction: column;
       align-items: center;
-      page-break-after: always;
+      page-break-after: var(--cover-page-break);
       text-align: center;
-      padding-top: 30mm;
+      padding-top: var(--cover-padding-top);
     }
 
     .cover-logo {
@@ -71,7 +79,7 @@
 
     .cover-title {
       color: var(--primary);
-      font-size: 26pt;
+      font-size: var(--cover-title-size);
       font-weight: bold;
       margin-bottom: 3mm;
     }
@@ -172,7 +180,7 @@
       border-collapse: collapse;
       table-layout: fixed;
       margin-bottom: 15pt;
-      page-break-inside: avoid;
+      page-break-inside: var(--table-page-break);
     }
 
     th {
@@ -182,14 +190,14 @@
       text-align: left;
       border: 0.4pt solid var(--border);
       font-weight: normal;
-      font-size: 9pt;
+      font-size: var(--table-font-size);
     }
 
     td {
       padding: 6pt 10pt;
       border: 0.4pt solid var(--border);
       vertical-align: top;
-      font-size: 9pt;
+      font-size: var(--table-font-size);
       overflow-wrap: break-word;
     }
 

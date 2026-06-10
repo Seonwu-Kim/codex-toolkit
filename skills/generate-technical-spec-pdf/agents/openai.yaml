@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Technical Spec PDF"
+  short_description: "Create dense technical specification PDFs"
+  default_prompt: "Turn requirements, ERD, and architecture documents into a dense, validated technical specification PDF."

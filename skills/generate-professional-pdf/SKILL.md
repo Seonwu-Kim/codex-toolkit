@@ -23,6 +23,14 @@ history, and whether each H2 starts a new page through
 document-specific required text, forbidden terms, occurrence counts, and
 review-page markers.
 
+Use the optional typography and cover fields when a document profile needs a
+dense technical layout or a compact meeting-notes cover:
+
+- `body_font_size`, `body_line_height`, and `table_font_size`
+- `table_page_break` (`avoid` or `auto`)
+- `cover_min_height`, `cover_padding_top`, and `cover_title_size`
+- `cover_page_break` (`always` or `auto`)
+
 For structured forms or contract tables, customize the first column with
 `first_column_width`, `first_column_background`,
 `first_column_font_weight`, and `first_column_white_space`.

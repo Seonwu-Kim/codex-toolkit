@@ -1,0 +1,16 @@
+{
+  "required_text": [
+    "회의 개요",
+    "핵심 요약",
+    "결정 사항",
+    "액션 아이템"
+  ],
+  "forbidden_terms": ["TBD", "TODO", "담당자 미정", "기한 미정"],
+  "forbidden_patterns": [],
+  "expected_occurrences": {},
+  "equal_occurrence_groups": [],
+  "minimum_page_count": 1,
+  "maximum_page_count": 8,
+  "review_terms": ["결정 사항", "액션 아이템", "미해결 질문"],
+  "report_occurrences": ["DEC-", "ACT-", "담당자", "기한"]
+}

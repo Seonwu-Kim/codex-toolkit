@@ -85,6 +85,24 @@ def render_template(template, html_body, metadata):
         "cover_content": render_cover_content(metadata),
         "primary_color": escaped(metadata.get("primary_color", "#223f73")),
         "accent_color": escaped(metadata.get("accent_color", "#0b7f90")),
+        "body_font_size": escaped(metadata.get("body_font_size", "9.5pt")),
+        "body_line_height": escaped(metadata.get("body_line_height", "1.55")),
+        "table_font_size": escaped(metadata.get("table_font_size", "9pt")),
+        "table_page_break": escaped(
+            metadata.get("table_page_break", "avoid")
+        ),
+        "cover_min_height": escaped(
+            metadata.get("cover_min_height", "260mm")
+        ),
+        "cover_padding_top": escaped(
+            metadata.get("cover_padding_top", "30mm")
+        ),
+        "cover_title_size": escaped(
+            metadata.get("cover_title_size", "26pt")
+        ),
+        "cover_page_break": escaped(
+            metadata.get("cover_page_break", "always")
+        ),
         "section_page_break": escaped(
             metadata.get("section_page_break", "auto")
         ),

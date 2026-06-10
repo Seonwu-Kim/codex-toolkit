@@ -1,0 +1,23 @@
+{
+  "required_text": [
+    "장애 요약",
+    "영향도",
+    "타임라인",
+    "원인 분석",
+    "재발 방지 작업"
+  ],
+  "forbidden_terms": ["TBD", "TODO", "담당자 미정"],
+  "forbidden_patterns": [
+    "(?i)(api[_-]?key|access[_-]?token|secret)\\s*[:=]\\s*[^\\s]+"
+  ],
+  "expected_occurrences": {},
+  "equal_occurrence_groups": [],
+  "minimum_page_count": 3,
+  "review_terms": [
+    "영향도",
+    "타임라인",
+    "원인 분석",
+    "재발 방지 작업"
+  ],
+  "report_occurrences": ["KST", "근본 원인", "담당", "기한"]
+}

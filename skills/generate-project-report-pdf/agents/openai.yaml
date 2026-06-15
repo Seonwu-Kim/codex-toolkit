@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Project Report PDF"
+  short_description: "Create milestone-focused project report PDFs"
+  default_prompt: "Turn implementation plans, progress updates, and test results into a concise, validated project report PDF."

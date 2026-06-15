@@ -1,0 +1,20 @@
+flowchart LR
+    client["Client"]
+    api["API"]
+    queue[["Work Queue"]]
+    worker["Worker"]
+    database[("Database")]
+
+    client -->|"Request"| api
+    api -->|"Create job"| database
+    api -->|"Publish"| queue
+    queue -->|"Consume"| worker
+    worker -->|"Callback"| api
+
+    classDef service fill:#eef7f8,stroke:#0b7f90,color:#24323a
+    classDef storage fill:#eef4fb,stroke:#203864,color:#24323a
+    classDef queue fill:#fff8e8,stroke:#c4510c,color:#24323a
+
+    class client,api,worker service
+    class database storage
+    class queue queue

@@ -1,0 +1,66 @@
+{
+  "brand": "Sample Service",
+  "title": "API 명세서",
+  "version": "v1.0",
+  "subtitle": "API Specification - REST / JSON",
+  "header": "Sample Service | API 명세서 v1.0",
+  "primary_color": "#223f73",
+  "accent_color": "#0b7f90",
+  "toc_enabled": true,
+  "toc_title": "목차",
+  "toc_depth": 3,
+  "toc_page_break_before": "always",
+  "toc_page_break_after": "always",
+  "section_page_break": "always",
+  "first_column_width": "22%",
+  "first_column_background": "#fafafa",
+  "first_column_font_weight": "bold",
+  "first_column_white_space": "nowrap",
+  "cover_fields": [
+    {
+      "label": "프로젝트",
+      "value": "Sample Service"
+    },
+    {
+      "label": "문서명",
+      "value": "API 명세서"
+    },
+    {
+      "label": "버전",
+      "value": "v1.0"
+    },
+    {
+      "label": "Base URL",
+      "lines": [
+        {
+          "label": "Local",
+          "value": "http://localhost:8080/api"
+        },
+        {
+          "label": "Development",
+          "value": "https://api.dev.example.com/api"
+        }
+      ]
+    },
+    {
+      "label": "인증 방식",
+      "lines": [
+        "관리자 API: OAuth 2.0 User JWT",
+        "내부 API: OAuth 2.0 Client Credentials",
+        "공개 API: 인증 없음"
+      ]
+    },
+    {
+      "label": "작성일",
+      "value": "2026-06-10"
+    }
+  ],
+  "revisions": [
+    {
+      "version": "v1.0",
+      "date": "2026-06-10",
+      "author": "작성자",
+      "description": "최초 작성"
+    }
+  ]
+}

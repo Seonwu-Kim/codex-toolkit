@@ -1,0 +1,64 @@
+{
+  "brand": "Project Name",
+  "title": "System Architecture Report",
+  "version": "v1.0",
+  "subtitle": "Professional Document",
+  "header": "Project Name | System Architecture Report v1.0",
+  "primary_color": "#223f73",
+  "accent_color": "#0b7f90",
+  "body_font_size": "9.5pt",
+  "body_line_height": "1.55",
+  "table_font_size": "9pt",
+  "table_page_break": "avoid",
+  "cover_min_height": "260mm",
+  "cover_padding_top": "30mm",
+  "cover_title_size": "26pt",
+  "cover_page_break": "always",
+  "toc_enabled": true,
+  "toc_title": "목차",
+  "toc_start_level": 2,
+  "toc_depth": 2,
+  "toc_page_break_before": "always",
+  "toc_page_break_after": "always",
+  "section_page_break": "auto",
+  "first_column_width": "auto",
+  "first_column_background": "transparent",
+  "first_column_font_weight": "normal",
+  "first_column_white_space": "normal",
+  "cover_fields": [
+    {
+      "label": "프로젝트",
+      "value": "Project Name"
+    },
+    {
+      "label": "문서명",
+      "value": "System Architecture Report"
+    },
+    {
+      "label": "작성일",
+      "value": "2026-06-10"
+    },
+    {
+      "label": "환경",
+      "lines": [
+        {
+          "label": "Development",
+          "value": "dev.example.com"
+        },
+        {
+          "label": "Production",
+          "value": "prod.example.com"
+        }
+      ]
+    }
+  ],
+  "revision_title": "문서 변경 이력",
+  "revisions": [
+    {
+      "version": "v1.0",
+      "date": "2026-06-10",
+      "author": "작성자",
+      "description": "최초 작성"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Milestone completion by reporting period.",
+  "width": 560,
+  "height": 280,
+  "data": {
+    "values": [
+      {"period": "W1", "completed": 2},
+      {"period": "W2", "completed": 5},
+      {"period": "W3", "completed": 8},
+      {"period": "W4", "completed": 11}
+    ]
+  },
+  "mark": {
+    "type": "bar",
+    "color": "#0b7f90",
+    "cornerRadiusTopLeft": 2,
+    "cornerRadiusTopRight": 2
+  },
+  "encoding": {
+    "x": {
+      "field": "period",
+      "type": "ordinal",
+      "title": "Reporting period"
+    },
+    "y": {
+      "field": "completed",
+      "type": "quantitative",
+      "title": "Completed milestones",
+      "scale": {"zero": true}
+    },
+    "tooltip": [
+      {"field": "period", "type": "ordinal"},
+      {"field": "completed", "type": "quantitative"}
+    ]
+  },
+  "config": {
+    "view": {"stroke": null},
+    "axis": {"labelColor": "#24323a", "titleColor": "#24323a"}
+  }
+}

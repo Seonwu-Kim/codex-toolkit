@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate API Spec PDF"
+  short_description: "Generate and visually validate polished API specification PDFs"
+  default_prompt: "Combine API specification Markdown files, generate a polished PDF, and validate every API section and rendered page."

@@ -1,0 +1,13 @@
+gantt
+    title Project Schedule
+    dateFormat YYYY-MM-DD
+    axisFormat %m-%d
+
+    section Design
+    Requirements       :done, requirements, 2026-01-05, 5d
+    Architecture       :done, architecture, after requirements, 4d
+
+    section Delivery
+    Implementation     :active, implementation, after architecture, 10d
+    Integration test   :integration, after implementation, 5d
+    Release            :milestone, release, after integration, 0d

@@ -1,0 +1,22 @@
+{
+  "required_text": [
+    "요약",
+    "요약 지표",
+    "마일스톤",
+    "구현 결과",
+    "테스트 결과",
+    "다음 작업"
+  ],
+  "forbidden_terms": ["TBD", "TODO", "근거 없음"],
+  "forbidden_patterns": [],
+  "expected_occurrences": {},
+  "equal_occurrence_groups": [],
+  "minimum_page_count": 3,
+  "review_terms": [
+    "요약 지표",
+    "마일스톤",
+    "테스트 결과",
+    "다음 작업"
+  ],
+  "report_occurrences": ["완료", "진행 중", "실패", "리스크"]
+}

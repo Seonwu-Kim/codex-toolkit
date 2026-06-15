@@ -1,0 +1,41 @@
+{
+  "brand": "Project Name",
+  "title": "Technical Specification",
+  "version": "v1.0",
+  "subtitle": "Requirements, Data Model, and Architecture",
+  "header": "Project Name | Technical Specification v1.0",
+  "primary_color": "#203864",
+  "accent_color": "#2f75b5",
+  "body_font_size": "8.8pt",
+  "body_line_height": "1.42",
+  "table_font_size": "8pt",
+  "table_page_break": "auto",
+  "cover_min_height": "260mm",
+  "cover_padding_top": "28mm",
+  "cover_title_size": "25pt",
+  "cover_page_break": "always",
+  "toc_enabled": true,
+  "toc_title": "목차",
+  "toc_depth": 2,
+  "toc_page_break_before": "always",
+  "toc_page_break_after": "always",
+  "section_page_break": "always",
+  "first_column_width": "24%",
+  "first_column_background": "#eef4fb",
+  "first_column_font_weight": "bold",
+  "first_column_white_space": "normal",
+  "cover_fields": [
+    {"label": "프로젝트", "value": "Project Name"},
+    {"label": "작성일", "value": "2026-06-10"},
+    {"label": "문서 상태", "value": "검토본"}
+  ],
+  "revision_title": "문서 변경 이력",
+  "revisions": [
+    {
+      "version": "v1.0",
+      "date": "2026-06-10",
+      "author": "작성자",
+      "description": "최초 작성"
+    }
+  ]
+}

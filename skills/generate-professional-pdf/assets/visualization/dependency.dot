@@ -1,0 +1,17 @@
+digraph dependencies {
+    graph [rankdir=LR, bgcolor="transparent", nodesep=0.8, ranksep=1.0];
+    node [shape=box, style="rounded,filled", fillcolor="#eef7f8",
+          color="#0b7f90", fontname="Arial"];
+    edge [color="#66758a", fontname="Arial", fontsize=10];
+
+    api [label="API"];
+    database [label="Database", shape=cylinder, fillcolor="#eef4fb",
+              color="#203864"];
+    queue [label="Queue", fillcolor="#fff8e8", color="#c4510c"];
+    worker [label="Worker"];
+
+    api:e -> database:w [label="state"];
+    api:e -> queue:w [label="job"];
+    queue:e -> worker:w [label="consume"];
+    worker:s -> api:s [label="callback", constraint=false];
+}

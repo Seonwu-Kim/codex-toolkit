@@ -11,7 +11,7 @@ SCRIPT_DIR = (
 )
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from render_document import render_template, render_toc
+from render_document import prepare_markdown_for_render, render_template, render_toc
 
 
 class RenderTemplateTest(unittest.TestCase):
@@ -30,7 +30,7 @@ class RenderTemplateTest(unittest.TestCase):
             '"NanumGothic", "Malgun Gothic", sans-serif'
         )
 
-        self.assertEqual(3, template.count(font_stack))
+        self.assertEqual(5, template.count(font_stack))
 
     def test_template_uses_korean_monospace_font_for_code(self):
         template_path = (
@@ -159,6 +159,86 @@ class RenderTemplateTest(unittest.TestCase):
             "8.8pt|1.42|8pt|auto|95mm|10mm|22pt|auto",
             rendered,
         )
+
+    def test_prepares_mermaid_and_dot_fences_as_rendered_figures(self):
+        rendered = []
+
+        def fake_renderer(visual_type, source, output):
+            rendered.append((visual_type, source.read_text(encoding="utf-8")))
+            output.write_text("<svg viewBox='0 0 1 1'></svg>", encoding="utf-8")
+
+        markdown_text = """# 문서
+
+```mermaid
+flowchart LR
+  A --> B
+```
+
+```dot
+digraph G { A -> B }
+```
+"""
+
+        with self.subTest("visual fences"):
+            prepared = prepare_markdown_for_render(
+                markdown_text,
+                Path("/tmp/source.md"),
+                Path("/tmp/render-work"),
+                visual_renderer=fake_renderer,
+            )
+
+        self.assertEqual(
+            [("mermaid", "flowchart LR\n  A --> B"), ("graphviz", "digraph G { A -> B }")],
+            rendered,
+        )
+        self.assertIn('<figure class="diagram diagram-mermaid">', prepared)
+        self.assertIn('<figure class="diagram diagram-graphviz">', prepared)
+        self.assertNotIn("```mermaid", prepared)
+        self.assertNotIn("```dot", prepared)
+
+    def test_prepares_latex_math_as_svg_figures(self):
+        rendered = []
+
+        def fake_math_renderer(expression, output, display):
+            rendered.append((expression, display))
+            output.write_text("<svg viewBox='0 0 1 1'></svg>", encoding="utf-8")
+
+        prepared = prepare_markdown_for_render(
+            "Inline $a+b$ and block:\n\n$$\nx^2\n$$\n",
+            Path("/tmp/source.md"),
+            Path("/tmp/render-work"),
+            math_renderer=fake_math_renderer,
+        )
+
+        self.assertEqual([("x^2", True), ("a+b", False)], rendered)
+        self.assertIn('class="math math-display"', prepared)
+        self.assertIn('class="math math-inline"', prepared)
+
+    def test_can_leave_latex_math_unprocessed_for_compatibility(self):
+        prepared = prepare_markdown_for_render(
+            "Price is $10 and math is $a+b$.",
+            Path("/tmp/source.md"),
+            Path("/tmp/render-work"),
+            math_enabled=False,
+        )
+
+        self.assertEqual("Price is $10 and math is $a+b$.", prepared)
+
+    def test_template_uses_named_pages_for_cover_toc_and_body(self):
+        template_path = (
+            Path(__file__).resolve().parents[1]
+            / "skills"
+            / "generate-professional-pdf"
+            / "assets"
+            / "professional-document.html"
+        )
+        template = template_path.read_text(encoding="utf-8")
+
+        self.assertIn("@page cover", template)
+        self.assertIn("@page toc", template)
+        self.assertIn("@page body", template)
+        self.assertIn("content: none;", template)
+        self.assertIn("counter-reset: page 1;", template)
 
 
 if __name__ == "__main__":

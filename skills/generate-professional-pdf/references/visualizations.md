@@ -15,7 +15,9 @@ quantitative charts.
 
 Use Mermaid first for ordinary report diagrams. Use Graphviz when edge routing
 or explicit node ports matter. Use Vega-Lite for data rather than drawing
-charts manually.
+charts manually. Markdown fences tagged `mermaid`, `mmd`, `dot`, `graphviz`,
+`vega-lite`, or `vegalite` are automatically rendered to SVG during the PDF
+build.
 
 ## Dependencies
 

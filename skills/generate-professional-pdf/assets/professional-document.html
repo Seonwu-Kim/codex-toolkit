@@ -6,6 +6,34 @@
     @page {
       size: A4;
       margin: 20mm 20mm 25mm 20mm;
+    }
+
+    @page cover {
+      @top-right {
+        content: none;
+      }
+      @bottom-center {
+        content: none;
+      }
+    }
+
+    @page toc {
+      @top-right {
+        content: "{{header}}";
+        font-family: "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR", "NanumGothic", "Malgun Gothic", sans-serif;
+        font-size: 8pt;
+        color: #999;
+        padding-bottom: 5mm;
+      }
+      @bottom-center {
+        content: "- " counter(page) " -";
+        font-family: "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR", "NanumGothic", "Malgun Gothic", sans-serif;
+        font-size: 8pt;
+        color: #999;
+      }
+    }
+
+    @page body {
       @top-right {
         content: "{{header}}";
         font-family: "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR", "NanumGothic", "Malgun Gothic", sans-serif;
@@ -63,6 +91,7 @@
     .page-border-bottom { bottom: -15mm; }
 
     .cover-page {
+      page: cover;
       min-height: var(--cover-min-height);
       display: flex;
       flex-direction: column;
@@ -135,6 +164,7 @@
     }
 
     .toc-page {
+      page: toc;
       page-break-before: var(--toc-page-break-before);
       page-break-after: var(--toc-page-break-after);
     }
@@ -221,6 +251,11 @@
       display: none;
     }
 
+    .content-wrapper {
+      page: body;
+      counter-reset: page 1;
+    }
+
     .content-wrapper > h1:first-child + h2,
     .content-wrapper > h2:first-child {
       page-break-before: avoid;
@@ -285,6 +320,32 @@
     pre code {
       font-family: "D2Coding", "Noto Sans Mono CJK KR", "NanumGothicCoding", "Menlo", "Monaco", "Courier New", monospace;
       font-variant-ligatures: none;
+    }
+
+    .codehilite .k,
+    .codehilite .kd,
+    .codehilite .kn { color: #b3e5fc; font-weight: bold; }
+    .codehilite .s,
+    .codehilite .s2 { color: #c8e6c9; }
+    .codehilite .mi,
+    .codehilite .mf { color: #ffe0b2; }
+    .codehilite .c,
+    .codehilite .c1 { color: #b0bec5; font-style: italic; }
+
+    .diagram,
+    .math {
+      text-align: center;
+      page-break-inside: avoid;
+    }
+
+    .math-inline {
+      display: inline-block;
+      margin: 0 2pt;
+      vertical-align: middle;
+    }
+
+    .math-display {
+      margin: 12pt auto;
     }
 
     blockquote {

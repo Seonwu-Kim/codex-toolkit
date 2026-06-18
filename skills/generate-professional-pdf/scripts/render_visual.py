@@ -118,20 +118,24 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
-    args = parse_args()
-    source = args.input.expanduser().resolve()
-    output = args.output.expanduser().resolve()
-
+def render_visual(visual_type, source, output, theme="neutral", background="white", scale=2.0):
+    source = Path(source).expanduser().resolve()
+    output = Path(output).expanduser().resolve()
     if not source.is_file():
         raise RuntimeError(f"Input file does not exist: {source}")
     if output.suffix.lower() != ".svg":
         raise RuntimeError("Output path must use the .svg extension.")
 
     output.parent.mkdir(parents=True, exist_ok=True)
-    executable = find_renderer(args.visual_type)
+    executable = find_renderer(visual_type)
+    args = argparse.Namespace(
+        visual_type=visual_type,
+        theme=theme,
+        background=background,
+        scale=scale,
+    )
     command = build_command(
-        args.visual_type,
+        visual_type,
         executable,
         source,
         output,
@@ -139,6 +143,19 @@ def main():
     )
     subprocess.run(command, check=True)
     validate_svg(output)
+    return output
+
+
+def main():
+    args = parse_args()
+    output = render_visual(
+        args.visual_type,
+        args.input,
+        args.output,
+        theme=args.theme,
+        background=args.background,
+        scale=args.scale,
+    )
     print(output)
 
 

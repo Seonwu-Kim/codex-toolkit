@@ -3,12 +3,135 @@ import argparse
 import html
 import json
 import re
+import tempfile
 from html.parser import HTMLParser
 from pathlib import Path
 
 
 def escaped(value):
     return html.escape(str(value), quote=True)
+
+
+FENCED_VISUAL_TYPES = {
+    "mermaid": "mermaid",
+    "mmd": "mermaid",
+    "dot": "graphviz",
+    "graphviz": "graphviz",
+    "vega-lite": "vega-lite",
+    "vegalite": "vega-lite",
+}
+
+
+def render_visual_asset(visual_type, source, output):
+    from render_visual import render_visual
+
+    render_visual(visual_type, source, output)
+
+
+def render_math_asset(expression, output, display):
+    try:
+        from matplotlib import mathtext
+    except ImportError as error:
+        raise RuntimeError(
+            "Missing dependency: matplotlib is required for LaTeX math SVG output."
+        ) from error
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    mathtext.math_to_image(
+        f"${expression}$",
+        str(output),
+        format="svg",
+        dpi=180 if display else 140,
+    )
+
+
+def image_tag(css_class, output):
+    return (
+        f'<figure class="{css_class}">'
+        f'<img src="{output.resolve().as_uri()}" alt="{css_class}">'
+        "</figure>"
+    )
+
+
+def replace_visual_fences(markdown_text, work_dir, visual_renderer):
+    visual_dir = Path(work_dir) / "visuals"
+    visual_dir.mkdir(parents=True, exist_ok=True)
+    counter = 0
+
+    def replace(match):
+        nonlocal counter
+        language = match.group("language").strip().lower()
+        visual_type = FENCED_VISUAL_TYPES.get(language)
+        if not visual_type:
+            return match.group(0)
+
+        counter += 1
+        suffix = {
+            "mermaid": ".mmd",
+            "graphviz": ".dot",
+            "vega-lite": ".json",
+        }[visual_type]
+        source = visual_dir / f"diagram-{counter}{suffix}"
+        output = visual_dir / f"diagram-{counter}.svg"
+        source.write_text(match.group("body"), encoding="utf-8")
+        visual_renderer(visual_type, source, output)
+        return image_tag(f"diagram diagram-{visual_type}", output)
+
+    return re.sub(
+        r"```(?P<language>[A-Za-z0-9_-]+)[^\n]*\n(?P<body>.*?)\n```",
+        replace,
+        markdown_text,
+        flags=re.DOTALL,
+    )
+
+
+def replace_math(markdown_text, work_dir, math_renderer):
+    math_dir = Path(work_dir) / "math"
+    math_dir.mkdir(parents=True, exist_ok=True)
+    counter = 0
+
+    def render(expression, display):
+        nonlocal counter
+        counter += 1
+        output = math_dir / f"math-{counter}.svg"
+        math_renderer(expression.strip(), output, display)
+        css_class = "math math-display" if display else "math math-inline"
+        return image_tag(css_class, output)
+
+    markdown_text = re.sub(
+        r"\$\$\s*\n?(?P<body>.*?)\n?\s*\$\$",
+        lambda match: render(match.group("body"), True),
+        markdown_text,
+        flags=re.DOTALL,
+    )
+    return re.sub(
+        r"(?<!\\)\$(?P<body>[^$\n]+?)(?<!\\)\$",
+        lambda match: render(match.group("body"), False),
+        markdown_text,
+    )
+
+
+def prepare_markdown_for_render(
+    markdown_text,
+    source_path,
+    work_dir,
+    visual_renderer=render_visual_asset,
+    math_renderer=render_math_asset,
+    math_enabled=True,
+):
+    prepared = replace_visual_fences(markdown_text, work_dir, visual_renderer)
+    if not math_enabled:
+        return prepared
+    return replace_math(prepared, work_dir, math_renderer)
+
+
+def markdown_extensions():
+    extensions = ["tables", "fenced_code", "toc", "sane_lists"]
+    try:
+        import pygments  # noqa: F401
+    except ImportError:
+        return extensions
+    return extensions + ["codehilite"]
 
 
 class HeadingParser(HTMLParser):
@@ -229,18 +352,25 @@ def render_pdf(markdown_path, template_path, metadata_path, output_path):
     metadata_path = Path(metadata_path)
     output_path = Path(output_path)
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-    html_body = markdown.markdown(
-        markdown_path.read_text(encoding="utf-8"),
-        extensions=["tables", "fenced_code", "toc", "sane_lists"],
-    )
-    metadata["toc_content"] = render_toc(html_body, metadata)
-    rendered = render_template(
-        template_path.read_text(encoding="utf-8"),
-        html_body,
-        metadata,
-    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    HTML(string=rendered, base_url=str(template_path.parent)).write_pdf(output_path)
+    with tempfile.TemporaryDirectory(prefix="professional-pdf-assets-") as directory:
+        prepared_markdown = prepare_markdown_for_render(
+            markdown_path.read_text(encoding="utf-8"),
+            markdown_path,
+            Path(directory),
+            math_enabled=metadata.get("math_enabled", False),
+        )
+        html_body = markdown.markdown(
+            prepared_markdown,
+            extensions=markdown_extensions(),
+        )
+        metadata["toc_content"] = render_toc(html_body, metadata)
+        rendered = render_template(
+            template_path.read_text(encoding="utf-8"),
+            html_body,
+            metadata,
+        )
+        HTML(string=rendered, base_url=str(template_path.parent)).write_pdf(output_path)
     return output_path
 
 

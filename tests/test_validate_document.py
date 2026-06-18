@@ -19,7 +19,7 @@ from validate_document import validate_pdf
 
 class ValidateDocumentTest(unittest.TestCase):
 
-    def test_uses_source_markdown_for_occurrence_validation(self):
+    def test_uses_pdf_text_for_occurrence_validation_even_with_source(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             profile = root / "profile.json"
@@ -39,7 +39,7 @@ class ValidateDocumentTest(unittest.TestCase):
             with (
                 patch(
                     "validate_document.extract_pdf",
-                    return_value=["목차 결론 2", "결론 본문"],
+                    return_value=["목차 2"],
                 ),
                 patch(
                     "validate_document.render_and_scan",
@@ -57,8 +57,12 @@ class ValidateDocumentTest(unittest.TestCase):
                     source_path=source,
                 )
 
-        self.assertEqual([], result["errors"])
-        self.assertEqual({"결론": 1}, result["occurrences"])
+        self.assertEqual(
+            ["expected 1 occurrences of '결론' but found 0"],
+            result["errors"],
+        )
+        self.assertEqual({"결론": 0}, result["occurrences"])
+        self.assertEqual({"결론": 1}, result["source_occurrences"])
 
 
 if __name__ == "__main__":

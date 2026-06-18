@@ -20,6 +20,7 @@
   "toc_depth": 2,
   "toc_page_break_before": "always",
   "toc_page_break_after": "always",
+  "math_enabled": false,
   "section_page_break": "auto",
   "first_column_width": "auto",
   "first_column_background": "transparent",

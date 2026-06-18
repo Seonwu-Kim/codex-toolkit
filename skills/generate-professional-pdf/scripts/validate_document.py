@@ -132,12 +132,12 @@ def validate_pdf(
     profile = json.loads(Path(profile_path).read_text(encoding="utf-8"))
     page_texts = extract_pdf(pdf_path)
     pdf_text = "\n".join(page_texts)
-    validation_text = (
+    source_text = (
         Path(source_path).read_text(encoding="utf-8")
         if source_path
-        else pdf_text
+        else None
     )
-    errors = validate_text(validation_text, profile)
+    errors = validate_text(pdf_text, profile)
 
     page_count = len(page_texts)
     minimum = profile.get("minimum_page_count")
@@ -164,9 +164,13 @@ def validate_pdf(
         )
 
     occurrences = {
-        token: validation_text.count(token)
+        token: pdf_text.count(token)
         for token in profile.get("report_occurrences", [])
     }
+    source_occurrences = {
+        token: source_text.count(token)
+        for token in profile.get("report_occurrences", [])
+    } if source_text is not None else {}
     sparse_text_pages = [
         index + 1
         for index, page_text in enumerate(page_texts)
@@ -177,6 +181,7 @@ def validate_pdf(
         **render_result,
         "sparse_text_pages": sparse_text_pages,
         "occurrences": occurrences,
+        "source_occurrences": source_occurrences,
         "review_pages": locate_review_terms(
             page_texts,
             profile.get("review_terms", []),

@@ -51,6 +51,11 @@ Code blocks use a Korean-capable monospace fallback stack. Keep JSON fences as
 `json` and inspect delimiter quotes, escaped quotes, and nested closing
 brackets during visual review.
 
+Syntax highlighting is enabled when `Pygments` is installed. LaTeX math is
+compiled to SVG when `math_enabled` is true in metadata and `matplotlib` is
+installed. Prefer `$$...$$` for display math and `$...$` only for deliberate
+inline math.
+
 For structured forms or contract tables, customize the first column with
 `first_column_width`, `first_column_background`,
 `first_column_font_weight`, and `first_column_white_space`.
@@ -64,6 +69,9 @@ When the document needs architecture diagrams, flows, ERDs, Gantt charts, or
 data charts, read `references/visualizations.md`. Start from a bundled template
 under `assets/visualization/` and render it with
 `scripts/render_visual.py`. Prefer generated SVG over hand-written SVG.
+Markdown fences tagged `mermaid`, `mmd`, `dot`, `graphviz`, `vega-lite`, or
+`vegalite` are rendered automatically during the PDF build and replaced with
+SVG figures.
 
 Do not place layout instructions, drawing notes, or agent-facing guidance in
 the document. Captions and callouts must explain the business or technical
@@ -74,7 +82,7 @@ meaning of the visual.
 Use a task-local virtual environment when dependencies are unavailable:
 
 ```bash
-python -m pip install markdown weasyprint pypdf Pillow
+python -m pip install markdown weasyprint pypdf Pillow Pygments matplotlib
 ```
 
 Use `pdftoppm` from Poppler. Prefer an existing bundled binary before
@@ -107,7 +115,10 @@ The build must fail when:
 - Rendered pages are blank-like or content reaches page edges suspiciously.
 
 The result includes page count, sparse-text page candidates, configured
-occurrence counts, and page numbers for every `review_terms` entry.
+PDF-extracted occurrence counts, optional source occurrence counts, and page
+numbers for every `review_terms` entry. Required text, forbidden text, and
+occurrence rules are checked against the extracted PDF text, not only the
+source Markdown.
 
 ## Visual Review
 

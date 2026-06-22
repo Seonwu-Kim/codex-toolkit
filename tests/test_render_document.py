@@ -1,4 +1,6 @@
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -11,7 +13,12 @@ SCRIPT_DIR = (
 )
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from render_document import prepare_markdown_for_render, render_template, render_toc
+from render_document import (
+    prepare_markdown_for_render,
+    render_pdf,
+    render_template,
+    render_toc,
+)
 
 
 class RenderTemplateTest(unittest.TestCase):
@@ -212,7 +219,32 @@ digraph G { A -> B }
 
         self.assertEqual([("x^2", True), ("a+b", False)], rendered)
         self.assertIn('class="math math-display"', prepared)
-        self.assertIn('class="math math-inline"', prepared)
+        self.assertIn('<span class="math math-inline">', prepared)
+        self.assertNotIn('<figure class="math math-inline">', prepared)
+
+    def test_latex_math_does_not_modify_code_fences(self):
+        rendered = []
+
+        def fake_math_renderer(expression, output, display):
+            rendered.append((expression, display))
+            output.write_text("<svg viewBox='0 0 1 1'></svg>", encoding="utf-8")
+
+        markdown_text = '''```js
+const formula = "$a$";
+```
+
+Real math $b$.
+'''
+
+        prepared = prepare_markdown_for_render(
+            markdown_text,
+            Path("/tmp/source.md"),
+            Path("/tmp/render-work"),
+            math_renderer=fake_math_renderer,
+        )
+
+        self.assertEqual([("b", False)], rendered)
+        self.assertIn('const formula = "$a$";', prepared)
 
     def test_can_leave_latex_math_unprocessed_for_compatibility(self):
         prepared = prepare_markdown_for_render(
@@ -238,7 +270,68 @@ digraph G { A -> B }
         self.assertIn("@page toc", template)
         self.assertIn("@page body", template)
         self.assertIn("content: none;", template)
-        self.assertIn("counter-reset: page 1;", template)
+        self.assertIn("counter-reset: bodyPage 0;", template)
+        self.assertIn("counter(bodyPage)", template)
+        self.assertIn(".math-inline img", template)
+
+    def test_python_requirements_include_optional_rendering_dependencies(self):
+        requirements_path = (
+            Path(__file__).resolve().parents[1]
+            / "skills"
+            / "generate-professional-pdf"
+            / "requirements.txt"
+        )
+        requirements = requirements_path.read_text(encoding="utf-8")
+
+        for package in ["Pygments", "matplotlib", "weasyprint", "pypdf"]:
+            self.assertIn(package, requirements)
+
+    def test_body_page_counter_restarts_after_cover_and_toc(self):
+        template_path = (
+            Path(__file__).resolve().parents[1]
+            / "skills"
+            / "generate-professional-pdf"
+            / "assets"
+            / "professional-document.html"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            markdown_path = root / "document.md"
+            metadata_path = root / "metadata.json"
+            output_path = root / "document.pdf"
+            markdown_path.write_text(
+                "# 제목\n\n## A\n\n본문\n\n"
+                '<div style="page-break-before: always"></div>\n\n'
+                "## B\n\n본문2\n",
+                encoding="utf-8",
+            )
+            metadata_path.write_text(
+                json.dumps(
+                    {
+                        "brand": "Brand",
+                        "title": "Title",
+                        "version": "v1",
+                        "subtitle": "Subtitle",
+                        "header": "Header",
+                        "cover_fields": [],
+                        "toc_enabled": True,
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            render_pdf(markdown_path, template_path, metadata_path, output_path)
+
+            from pypdf import PdfReader
+
+            pages = [
+                " | ".join((page.extract_text() or "").splitlines())
+                for page in PdfReader(str(output_path)).pages
+            ]
+
+        self.assertIn("- 1 -", pages[2])
+        self.assertIn("- 2 -", pages[3])
 
 
 if __name__ == "__main__":

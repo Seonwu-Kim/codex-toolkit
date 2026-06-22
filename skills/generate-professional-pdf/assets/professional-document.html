@@ -34,6 +34,7 @@
     }
 
     @page body {
+      counter-increment: bodyPage;
       @top-right {
         content: "{{header}}";
         font-family: "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR", "NanumGothic", "Malgun Gothic", sans-serif;
@@ -42,7 +43,7 @@
         padding-bottom: 5mm;
       }
       @bottom-center {
-        content: "- " counter(page) " -";
+        content: "- " counter(bodyPage) " -";
         font-family: "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR", "NanumGothic", "Malgun Gothic", sans-serif;
         font-size: 8pt;
         color: #999;
@@ -253,7 +254,7 @@
 
     .content-wrapper {
       page: body;
-      counter-reset: page 1;
+      counter-reset: bodyPage 0;
     }
 
     .content-wrapper > h1:first-child + h2,
@@ -344,8 +345,19 @@
       vertical-align: middle;
     }
 
+    .math-inline img {
+      display: inline-block;
+      max-height: 1.2em;
+      margin: 0;
+      vertical-align: middle;
+    }
+
     .math-display {
       margin: 12pt auto;
+    }
+
+    .math-display img {
+      margin: 0 auto;
     }
 
     blockquote {

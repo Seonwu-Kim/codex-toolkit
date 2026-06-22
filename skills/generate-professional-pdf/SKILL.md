@@ -82,7 +82,7 @@ meaning of the visual.
 Use a task-local virtual environment when dependencies are unavailable:
 
 ```bash
-python -m pip install markdown weasyprint pypdf Pillow Pygments matplotlib
+python -m pip install -r requirements.txt
 ```
 
 Use `pdftoppm` from Poppler. Prefer an existing bundled binary before
@@ -119,6 +119,10 @@ PDF-extracted occurrence counts, optional source occurrence counts, and page
 numbers for every `review_terms` entry. Required text, forbidden text, and
 occurrence rules are checked against the extracted PDF text, not only the
 source Markdown.
+
+When math is enabled, the renderer protects fenced code blocks before replacing
+LaTeX delimiters. If a literal `$...$` appears outside code and is not math,
+escape the dollar signs or keep `math_enabled` false.
 
 ## Visual Review
 

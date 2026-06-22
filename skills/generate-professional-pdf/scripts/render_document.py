@@ -53,6 +53,16 @@ def image_tag(css_class, output):
     )
 
 
+def math_tag(css_class, output, display):
+    if display:
+        return image_tag(css_class, output)
+    return (
+        f'<span class="{css_class}">'
+        f'<img src="{output.resolve().as_uri()}" alt="{css_class}">'
+        "</span>"
+    )
+
+
 def replace_visual_fences(markdown_text, work_dir, visual_renderer):
     visual_dir = Path(work_dir) / "visuals"
     visual_dir.mkdir(parents=True, exist_ok=True)
@@ -96,18 +106,26 @@ def replace_math(markdown_text, work_dir, math_renderer):
         output = math_dir / f"math-{counter}.svg"
         math_renderer(expression.strip(), output, display)
         css_class = "math math-display" if display else "math math-inline"
-        return image_tag(css_class, output)
+        return math_tag(css_class, output, display)
 
-    markdown_text = re.sub(
-        r"\$\$\s*\n?(?P<body>.*?)\n?\s*\$\$",
-        lambda match: render(match.group("body"), True),
-        markdown_text,
-        flags=re.DOTALL,
-    )
-    return re.sub(
-        r"(?<!\\)\$(?P<body>[^$\n]+?)(?<!\\)\$",
-        lambda match: render(match.group("body"), False),
-        markdown_text,
+    def replace_segment(segment):
+        segment = re.sub(
+            r"\$\$\s*\n?(?P<body>.*?)\n?\s*\$\$",
+            lambda match: render(match.group("body"), True),
+            segment,
+            flags=re.DOTALL,
+        )
+        return re.sub(
+            r"(?<!\\)\$(?P<body>[^$\n]+?)(?<!\\)\$",
+            lambda match: render(match.group("body"), False),
+            segment,
+        )
+
+    fence_pattern = r"(```[^\n]*\n.*?\n```|~~~[^\n]*\n.*?\n~~~)"
+    parts = re.split(fence_pattern, markdown_text, flags=re.DOTALL)
+    return "".join(
+        part if part.startswith(("```", "~~~")) else replace_segment(part)
+        for part in parts
     )
 
 

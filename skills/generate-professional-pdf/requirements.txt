@@ -1,0 +1,6 @@
+markdown
+weasyprint
+pypdf
+Pillow
+Pygments
+matplotlib
